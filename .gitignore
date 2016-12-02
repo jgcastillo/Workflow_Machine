@@ -47,4 +47,4 @@ Temporary Items
 .apdisk
 
 # Archivo compilados del proyecto en netbeans
-\Workflow_Machine\WorkFlowSchool\build\classes\*
+/Workflow_Machine/WorkFlowSchool/build/classes/**
