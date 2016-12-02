@@ -42,7 +42,7 @@ public class ActivityTarget implements Serializable {
     private Activity activityId;
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Group1 groupId;
+    private Group groupId;
     @JoinColumn(name = "target_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Target targetId;
@@ -70,11 +70,11 @@ public class ActivityTarget implements Serializable {
         this.activityId = activityId;
     }
 
-    public Group1 getGroupId() {
+    public Group getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Group1 groupId) {
+    public void setGroupId(Group groupId) {
         this.groupId = groupId;
     }
 

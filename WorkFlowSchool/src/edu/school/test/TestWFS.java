@@ -2,14 +2,17 @@ package edu.school.test;
 
 import edu.school.api.ControllerIntf;
 import edu.school.controller.Controller;
+import edu.school.entities.Action;
+import edu.school.entities.Group;
+import edu.school.entities.GroupMember;
 import edu.school.entities.Process;
-import edu.school.entities.ProcessAdmin;
 import edu.school.entities.Request;
-import edu.school.entities.RequestData;
-import edu.school.entities.RequestStakeholder;
+import edu.school.entities.RequestAction;
 import edu.school.entities.State;
 import edu.school.entities.Transition;
+import edu.school.entities.TransitionAction;
 import edu.school.entities.User;
+import edu.school.utilities.ActionTypeEnum;
 import edu.school.utilities.DateUtilities;
 import edu.school.utilities.StateTypeEnum;
 import java.time.LocalDate;
@@ -19,46 +22,66 @@ public class TestWFS {
     public static void main(String[] args) {
         ControllerIntf controller = new Controller();
         
-        // se crea un usuario y un proceso
-        Date birthdayDate = DateUtilities.localDateToDate(LocalDate.of(1975, 1, 12));
-        User user = controller.createUser("Juan", "Dorta", birthdayDate);
-        birthdayDate = DateUtilities.localDateToDate(LocalDate.of(1963, 5, 22));
-        User stakeHolder = controller.createUser("Pedro", "Perez", birthdayDate);
-        Process process = controller.createProcess("Primer proceso");
-        
-        // se asigna el proceso al usuario 
-        ProcessAdmin prcAdmin = controller.assignAdmin(process, user);
-        System.out.println("Asignación realizada. " + prcAdmin.toString());
+        Process firstProcess = controller.createProcess("first process");
 
-        // se crea el requerimiento en su estado inicial
-        String stateType = StateTypeEnum.START.stateTypeName();
-        State currentState = controller.createState(stateType, process, 
-                "Estado inicial del proceso", "");
+        // se crean tres usuarios
+        User jane = controller.createUser("Jane", "Sponte1", 
+                DateUtilities.localDateToDate(LocalDate.of(1965, 7, 14)));
+        User tom = controller.createUser("Tom", "Sponte2",
+                DateUtilities.localDateToDate(LocalDate.of(1973, 4, 19)));
+        User gary = controller.createUser("Gary", "Sponte3",
+                DateUtilities.localDateToDate(LocalDate.of(1975, 10, 5)));
         
-        // con la data inicial se crea el requerimiento
-        Date dateRequested = new Date();
-        Request request = controller.createRequest("primer requerimiento", 
-                dateRequested, process, currentState, user);
-        RequestData requestData = controller.createRequestData("uno", 
-                "la primera data que se asigna a este requerimiento", request);
-        System.out.println("Requerimiento creado " + request.getTitle());
+        // se crea un grupo
+        Group excutives = controller.createGroup(firstProcess, "excutives");
+        // se agregan tom y gary al grupo
+        GroupMember groupMember1 = controller.createGroupMember(excutives, gary);
+        GroupMember groupMember2 = controller.createGroupMember(excutives, tom);
         
-        // se le asigna un interesado (stakeholder)
-        RequestStakeholder requestStakeholder = controller
-                .createRequestStackeholder(request, stakeHolder);
-        System.out.println("Se le asigna un interesado " + stakeHolder.getLastName());
+        // se crean varios estados
+        State stateA = controller.createState(StateTypeEnum.START.name(), 
+                firstProcess, "stateA", "");
+        State stateB = controller.createState(StateTypeEnum.NORMAL.name(),
+                firstProcess, "stateB", "");
+        State stateC = controller.createState(StateTypeEnum.DENIED.name(),
+                firstProcess, "stateC", "");
         
-        // El proceso cambio de un stado a otro
-        State nextState = controller
-                .createState(StateTypeEnum.NORMAL.stateTypeName(), process,
-                        "Paso a Normal", "");
+        // se realizan varias transiciones
+        // A pasa a B
+        Transition transitionA = controller.createTransition(firstProcess, 
+                stateA, stateB);
+        // A pasa a C
+        Transition transitionB = controller.createTransition(firstProcess, 
+                stateA, stateC);
+        // B pasa a C
+        Transition transitionC = controller.createTransition(firstProcess, 
+                stateB, stateC);
         
-        // ahora se hace la transición:
-        Transition transition = controller.createTransition(process, 
-                currentState, nextState);
-        System.out.println("El proceso " + transition.getProcessId().getName()
-                + " paso de " + transition.getCurrentStateId().getName()
-                + " a " + transition.getNextStateId().getName());
+        // se realizan acciones de acuerdo a la transición
+        Action aprovedByRequester = controller
+                .createAction(ActionTypeEnum.APPROVE.name(), firstProcess, 
+                        "Aproved By Requester", "");
+        Action aprovedByExecutives = controller
+                .createAction(ActionTypeEnum.APPROVE.name(), firstProcess, 
+                        "Aproved By Executives", "");
+        Action deniedByExecutives = controller
+                .createAction(ActionTypeEnum.DENY.name(), firstProcess, 
+                        "Denied By Executives", "");
+        Action deniedByRequester = controller.createAction(ActionTypeEnum.DENY.name(),
+                firstProcess, "Denied By Requester", "");
+        
+        
+        TransitionAction ta1 = controller.createTransitionAction(transitionA, aprovedByRequester);
+        TransitionAction ta2 = controller.createTransitionAction(transitionA, aprovedByExecutives);
+        TransitionAction ta3 = controller.createTransitionAction(transitionB, deniedByExecutives);
+        TransitionAction ta4 = controller.createTransitionAction(transitionC, deniedByExecutives);
+        
+        Request janeRequest = controller.createRequest("Jane´s Request", 
+                new Date(), firstProcess, stateA, jane);
+        
+        RequestAction ra1 = controller.createRequestAction(janeRequest, aprovedByRequester, transitionA, 1, 0);
+        RequestAction ra2 = controller.createRequestAction(janeRequest, aprovedByExecutives, transitionA, 1, 0);
+        RequestAction ra3 = controller.createRequestAction(janeRequest, aprovedByExecutives, transitionA, 1, 0);
         
     }
     

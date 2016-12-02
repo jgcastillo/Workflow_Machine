@@ -1,11 +1,11 @@
 package edu.school.utilities;
 
 public enum ActionTypeEnum {
-    APPROVE("aprobado"),
-    DENY("negado"),
-    CANCEL("cancelado"),
-    RESTART("reiniciar"),
-    RESOLVE("resuelto");
+    APPROVE("Aprobadar"),
+    DENY("Negar"),
+    CANCEL("Cancelar"),
+    RESTART("Reiniciar"),
+    RESOLVE("Resolver");
 
     private final String actionTypeName;
 

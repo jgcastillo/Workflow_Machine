@@ -22,10 +22,10 @@
     <class>edu.school.entities.Request</class>
     <class>edu.school.entities.ActionTarget</class>
     <class>edu.school.entities.StateType</class>
-    <class>edu.school.entities.Group1</class>
     <class>edu.school.entities.RequestNote</class>
     <class>edu.school.entities.Action</class>
     <class>edu.school.entities.RequestFile</class>
+    <class>edu.school.entities.Group</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/wfe_0.1?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

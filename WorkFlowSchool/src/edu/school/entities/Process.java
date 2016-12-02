@@ -55,7 +55,7 @@ public class Process implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "processId")
     private Collection<State> stateCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "processId")
-    private Collection<Group1> group1Collection;
+    private Collection<Group> group1Collection;
 
     public Process() {
     }
@@ -135,11 +135,11 @@ public class Process implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Group1> getGroup1Collection() {
+    public Collection<Group> getGroup1Collection() {
         return group1Collection;
     }
 
-    public void setGroup1Collection(Collection<Group1> group1Collection) {
+    public void setGroup1Collection(Collection<Group> group1Collection) {
         this.group1Collection = group1Collection;
     }
 

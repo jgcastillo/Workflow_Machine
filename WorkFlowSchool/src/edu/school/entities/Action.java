@@ -43,6 +43,8 @@ public class Action implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Column(name = "action_type")
+    private String actionType;
     @Column(name = "name")
     private String name;
     @Lob
@@ -54,9 +56,6 @@ public class Action implements Serializable {
     private Collection<TransitionAction> transitionActionCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "actionId")
     private Collection<ActionTarget> actionTargetCollection;
-    @JoinColumn(name = "action_type_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private ActionType actionTypeId;
     @JoinColumn(name = "process_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Process processId;
@@ -74,6 +73,14 @@ public class Action implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(String actionType) {
+        this.actionType = actionType;
     }
 
     public String getName() {
@@ -117,14 +124,6 @@ public class Action implements Serializable {
 
     public void setActionTargetCollection(Collection<ActionTarget> actionTargetCollection) {
         this.actionTargetCollection = actionTargetCollection;
-    }
-
-    public ActionType getActionTypeId() {
-        return actionTypeId;
-    }
-
-    public void setActionTypeId(ActionType actionTypeId) {
-        this.actionTypeId = actionTypeId;
     }
 
     public Process getProcessId() {
