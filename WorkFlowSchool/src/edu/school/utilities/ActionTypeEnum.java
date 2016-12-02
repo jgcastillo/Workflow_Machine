@@ -4,7 +4,7 @@ public enum ActionTypeEnum {
     APPROVE("aprobado"),
     DENY("negado"),
     CANCEL("cancelado"),
-    RESTART("re-comenzar"),
+    RESTART("reiniciar"),
     RESOLVE("resuelto");
 
     private final String actionTypeName;
